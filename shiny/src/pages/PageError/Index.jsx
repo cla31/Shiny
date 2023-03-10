@@ -22,14 +22,6 @@ const ErrorSubtitle = styled.h2`
 
 
 const PageError = () => {
-  // return (
-  //   <>
-  //     <div>ceci est une page erreur 🤦🏽‍♀️</div>
-  //     <Link to="/" className="message">
-  //       Retourner sur la page d'accueil
-  //     </Link>
-  //   </>
-  // )
   return(
   <ErrorWrapper>
     <ErrorTitle>Oups...</ErrorTitle>
