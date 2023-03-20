@@ -5,17 +5,20 @@ import PageError from './pages/PageError/Index'
 import Layout from './components/Layout/Index'
 import Freelances from './pages/Freelances/Index'
 import Results from './pages/Results/Index'
-import { createGlobalStyle } from 'styled-components'
+// import { createGlobalStyle } from 'styled-components'
+import GlobalStyle from './utils/style/GlobalStyle.jsx'
+import { ThemeProvider } from  './utils/context/Index'
 
-const GlobalStyle = createGlobalStyle`
-    div {
-        font-family: 'Trebuchet MS', Helvetica, sans-serif;
-    }
-`
+// const GlobalStyle = createGlobalStyle`
+//     div {
+//         font-family: 'Trebuchet MS', Helvetica, sans-serif;
+//     }
+// `
 
 const App = () => {
   return (
     <Router>
+      <ThemeProvider>
       <GlobalStyle />
       <Routes>
         <Route element={<Layout />}>
@@ -26,6 +29,7 @@ const App = () => {
         </Route>
         <Route path="*" element={<PageError />} />
       </Routes>
+      </ThemeProvider>
     </Router>
   )
 }
