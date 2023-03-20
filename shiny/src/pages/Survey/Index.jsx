@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 import { colors } from '../../utils/style/colors'
@@ -36,6 +37,13 @@ const Survey = () => {
   const questionNumberInt = parseInt(questionNumber)
   const prevQuestionNumber = questionNumberInt === 1 ? 1 : questionNumberInt - 1
   const nextQuestionNumber = questionNumberInt + 1
+  useEffect(() => {
+    fetch(`http://localhost:8000/survey`)
+         .then((response) => response.json()
+         .then(({ surveyData }) => console.log("Réponse call API",surveyData))
+         .catch((error) => console.log(error))
+     )
+ }, [])
   return (
     <SurveyContainer>
       <QuestionTitle>Question {questionNumber}</QuestionTitle>
