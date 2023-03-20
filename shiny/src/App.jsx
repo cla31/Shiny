@@ -4,6 +4,7 @@ import Survey from './pages/Survey/Index'
 import PageError from './pages/PageError/Index'
 import Layout from './components/Layout/Index'
 import Freelances from './pages/Freelances/Index'
+import Results from './pages/Results/Index'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
@@ -20,6 +21,7 @@ const App = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/survey/:questionNumber" element={<Survey />} />
+          <Route path="/results" element={<Results />} />
           <Route path="/freelances" element={<Freelances />} />
         </Route>
         <Route path="*" element={<PageError />} />
