@@ -46,18 +46,53 @@ const Survey = () => {
   const [surveyData, setSurveyData] = useState({})
   //pour gérer le loader:
   const [isDataLoading, setDataLoading] = useState(false)
-  useEffect(() => {
+  const [error, setError]=useState(null)
+//   useEffect(() => {
+//     setDataLoading(true)
+//     fetch(`http://localhost:8000/survey`)
+//          .then((response) => response.json()
+//          .then(({ surveyData }) => {
+//          console.log("Réponse call API",surveyData) 
+//          setSurveyData(surveyData)
+//          setDataLoading(false)
+//         })
+//          .catch((error) => console.log(error))
+//      )
+//  }, [])
+
+//Syntaxe await:
+useEffect(()=>{
+  //UseEffect ne peut pas prendre en paramètre une fonction asyncrone donc on les fait à part..
+
+  async function fetchSurvey(){
     setDataLoading(true)
-    fetch(`http://localhost:8000/survey`)
-         .then((response) => response.json()
-         .then(({ surveyData }) => {
-         console.log("Réponse call API",surveyData) 
-         setSurveyData(surveyData)
-         setDataLoading(false)
-        })
-         .catch((error) => console.log(error))
-     )
- }, [])
+    try{
+        const response= await fetch(`http://localhost:8000/survey`)
+        // On déstructure car surveyData est une propriété de l'objet qui est retourné,
+        // Puis on parse avec le ".json"
+        // const {surveyData} = await response.json()
+        //test: surveyData sans destructuring
+        // const surveyData = await response.json()
+        // console.log("surveyData sans destructuring",surveyData);
+         const {surveyData} = await response.json()
+         console.log("surveyData avec destructuring",surveyData);
+        setSurveyData(surveyData)
+    }
+    catch(err){
+      console.log("erreur",err);
+      setError(true)
+
+    }
+    finally{
+      setDataLoading(false)
+    }
+  }
+  fetchSurvey()
+}, [])
+
+if (error) {
+  return <span>Oups il y a eu un problème</span>
+}
   return (
     <SurveyContainer>
       <QuestionTitle>Question {questionNumber}</QuestionTitle>
