@@ -7,8 +7,8 @@ import { useState, useEffect } from 'react'
 // si la data est en train de charger avec isLoading.
 export function useFetch(url) {
   const [data, setData] = useState({})
-
   const [isLoading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   //   Le hook fait un return  vide si le paramètre de l’URL est vide,
   //   et commence par mettre isLoading  à true.
   //   Il déclare la fonction asynchrone fetchData  qui permet de :
@@ -21,20 +21,26 @@ export function useFetch(url) {
   useEffect(() => {
     if (!url) return
 
-    async function fetchData() {
-      const response = await fetch(url)
-
-      const data = await response.json()
-
-      setData(data)
-
-      setLoading(false)
-    }
-
     setLoading(true)
+
+    async function fetchData() {
+      try {
+        const response = await fetch(url)
+
+        const data = await response.json()
+
+        setData(data)
+      } catch (err) {
+        console.log(err)
+
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
+    }
 
     fetchData()
   }, [url])
 
-  return { isLoading, data }
+  return { isLoading, data, error }
 }
