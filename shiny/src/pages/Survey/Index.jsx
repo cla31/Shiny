@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 import { colors } from '../../utils/style/colors'
 import styled from 'styled-components'
+import { Loader } from '../../utils/style/Atoms'
 
 
 const SurveyContainer = styled.div`
@@ -43,14 +44,16 @@ const Survey = () => {
   // setSurveyData(surveyData).
   //Donc pour initialiser on met un objet dans le useState
   const [surveyData, setSurveyData] = useState({})
+  //pour gérer le loader:
+  const [isDataLoading, setDataLoading] = useState(false)
   useEffect(() => {
-    // setDataLoading(true)
+    setDataLoading(true)
     fetch(`http://localhost:8000/survey`)
          .then((response) => response.json()
          .then(({ surveyData }) => {
          console.log("Réponse call API",surveyData) 
          setSurveyData(surveyData)
-        //  setDataLoading(false)
+         setDataLoading(false)
         })
          .catch((error) => console.log(error))
      )
@@ -58,22 +61,26 @@ const Survey = () => {
   return (
     <SurveyContainer>
       <QuestionTitle>Question {questionNumber}</QuestionTitle>
-      <QuestionContent>{surveyData[questionNumber]}   </QuestionContent>
-        <LinkWrapper>
         {/* Version1 */}
-          {/* <NavLink to={`/survey/${prevQuestionNumber}`}>Précédent</NavLink>
-          {questionNumberInt === 10 ? (
-            <NavLink to="/results">Résultats</NavLink>
-          ) : (
-            <NavLink to={`/survey/${nextQuestionNumber}`}>Suivant</NavLink>
-          )} */}
-        {/* Version2 */}
-            <NavLink to={`/survey/${prevQuestionNumber}`}>Précédent</NavLink>
+            {/* <NavLink to={`/survey/${prevQuestionNumber}`}>Précédent</NavLink>
             {surveyData[questionNumberInt + 1] ? (
                 <NavLink to={`/survey/${nextQuestionNumber}`}>Suivant</NavLink>
             ) : (
                 <NavLink to="/results">Résultats</NavLink>
-            )}
+            )} */}
+        {/* Version2 */}
+             {isDataLoading ? (
+        <Loader />
+      ) : (
+        <QuestionContent>{surveyData[questionNumber]}</QuestionContent>
+      )}
+       <LinkWrapper>
+        <NavLink to={`/survey/${prevQuestionNumber}`}>Précédent</NavLink>
+        {surveyData[questionNumberInt + 1] ? (
+          <NavLink to={`/survey/${nextQuestionNumber}`}>Suivant</NavLink>
+        ) : (
+          <NavLink to="/results">Résultats</NavLink>
+        )}
         </LinkWrapper>
       </SurveyContainer>
   )
