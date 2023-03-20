@@ -1,10 +1,11 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect,  useContext  } from 'react'
 import { useParams } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 import { colors } from '../../utils/style/colors'
 import styled from 'styled-components'
 import { Loader } from '../../utils/style/Atoms'
+import { SurveyContext } from '../../utils/context/Index'
 
 
 const SurveyContainer = styled.div`
@@ -32,48 +33,53 @@ const LinkWrapper = styled.div`
   }
 `
 
+const ReplyBox = styled.button`
+  border: none;
+  height: 100px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colors.backgroundLight};
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: ${(props) =>
+    props.isSelected ? `0px 0px 0px 2px ${colors.primary} inset` : 'none'};
+  &:first-child {
+    margin-right: 15px;
+  }
+  &:last-of-type {
+    margin-left: 15px;
+  }
+`
+
+const ReplyWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
 
 const Survey = () => {
   const { questionNumber } = useParams()
   const questionNumberInt = parseInt(questionNumber)
   const prevQuestionNumber = questionNumberInt === 1 ? 1 : questionNumberInt - 1
   const nextQuestionNumber = questionNumberInt + 1
-  //Pour récupérer les données du fetch en vue de les afficher
-  // surveyData va nous permettre de stocker l’objet qui a été retourné par l’API. 
-  // À partir de là, on peut exploiter questions  assez simplement en appelant :
-  // setSurveyData(surveyData).
-  //Donc pour initialiser on met un objet dans le useState
   const [surveyData, setSurveyData] = useState({})
-  //pour gérer le loader:
   const [isDataLoading, setDataLoading] = useState(false)
+  const { answers, saveAnswers } = useContext(SurveyContext)
   const [error, setError]=useState(null)
-//   useEffect(() => {
-//     setDataLoading(true)
-//     fetch(`http://localhost:8000/survey`)
-//          .then((response) => response.json()
-//          .then(({ surveyData }) => {
-//          console.log("Réponse call API",surveyData) 
-//          setSurveyData(surveyData)
-//          setDataLoading(false)
-//         })
-//          .catch((error) => console.log(error))
-//      )
-//  }, [])
 
-//Syntaxe await:
-useEffect(()=>{
-  //UseEffect ne peut pas prendre en paramètre une fonction asyncrone donc on les fait à part..
+  function saveReply(answer) {
+    saveAnswers({ [questionNumber]: answer })
+  }
+  //Syntaxe await:
+  useEffect(()=>{
+    //UseEffect ne peut pas prendre en paramètre une fonction asyncrone donc on les fait à part..
 
   async function fetchSurvey(){
     setDataLoading(true)
     try{
         const response= await fetch(`http://localhost:8000/survey`)
-        // On déstructure car surveyData est une propriété de l'objet qui est retourné,
-        // Puis on parse avec le ".json"
-        // const {surveyData} = await response.json()
-        //test: surveyData sans destructuring
-        // const surveyData = await response.json()
-        // console.log("surveyData sans destructuring",surveyData);
          const {surveyData} = await response.json()
          console.log("surveyData avec destructuring",surveyData);
         setSurveyData(surveyData)
@@ -96,19 +102,25 @@ if (error) {
   return (
     <SurveyContainer>
       <QuestionTitle>Question {questionNumber}</QuestionTitle>
-        {/* Version1 */}
-            {/* <NavLink to={`/survey/${prevQuestionNumber}`}>Précédent</NavLink>
-            {surveyData[questionNumberInt + 1] ? (
-                <NavLink to={`/survey/${nextQuestionNumber}`}>Suivant</NavLink>
-            ) : (
-                <NavLink to="/results">Résultats</NavLink>
-            )} */}
-        {/* Version2 */}
              {isDataLoading ? (
         <Loader />
       ) : (
         <QuestionContent>{surveyData[questionNumber]}</QuestionContent>
       )}
+      <ReplyWrapper>
+        <ReplyBox
+          onClick={() => saveReply(true)}
+          isSelected={answers[questionNumber] === true}
+        >
+          Oui
+        </ReplyBox>
+        <ReplyBox
+          onClick={() => saveReply(false)}
+          isSelected={answers[questionNumber] === false}
+        >
+          Non
+        </ReplyBox>
+      </ReplyWrapper>
        <LinkWrapper>
         <NavLink to={`/survey/${prevQuestionNumber}`}>Précédent</NavLink>
         {surveyData[questionNumberInt + 1] ? (

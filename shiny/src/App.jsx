@@ -7,7 +7,7 @@ import Freelances from './pages/Freelances/Index'
 import Results from './pages/Results/Index'
 // import { createGlobalStyle } from 'styled-components'
 import GlobalStyle from './utils/style/GlobalStyle.jsx'
-import { ThemeProvider } from  './utils/context/Index'
+import { ThemeProvider,SurveyProvider } from  './utils/context/Index'
 
 // const GlobalStyle = createGlobalStyle`
 //     div {
@@ -19,16 +19,18 @@ const App = () => {
   return (
     <Router>
       <ThemeProvider>
-      <GlobalStyle />
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/survey/:questionNumber" element={<Survey />} />
-          <Route path="/results" element={<Results />} />
-          <Route path="/freelances" element={<Freelances />} />
-        </Route>
-        <Route path="*" element={<PageError />} />
-      </Routes>
+        <SurveyProvider>
+          <GlobalStyle />
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/survey/:questionNumber" element={<Survey />} />
+              <Route path="/results" element={<Results />} />
+              <Route path="/freelances" element={<Freelances />} />
+            </Route>
+            <Route path="*" element={<PageError />} />
+          </Routes>
+        </SurveyProvider>
       </ThemeProvider>
     </Router>
   )
