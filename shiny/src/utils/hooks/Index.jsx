@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { ThemeContext } from '../context/Index'
 
 // Pour notre nouveau hook, useFetch,
 // on lui passe en paramètre l’URL de l’API
@@ -43,4 +44,9 @@ export function useFetch(url) {
   }, [url])
 
   return { isLoading, data, error }
+}
+
+export function useTheme() {
+  const { theme, toggleTheme } = useContext(ThemeContext)
+  return { theme, toggleTheme }
 }

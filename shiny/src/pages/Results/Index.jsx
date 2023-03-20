@@ -71,7 +71,7 @@ function Results() {
   const { data, isLoading, error } = useFetch(
     `http://localhost:8000/results?${fetchParams}`
   )
-
+  console.log('========== data ===================', data)
   if (error) {
     return <span>Il y a un problème</span>
   }
