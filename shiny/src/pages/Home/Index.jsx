@@ -36,11 +36,14 @@ const StyledTitle = styled.h2`
 const Illustration = styled.img`
   flex: 1;
 `
-
-const Home=() =>{
+export function sum(a, b) {
+  return a + b
+}
+const Home = () => {
   return (
     <HomeWrapper>
       <HomerContainer>
+        {sum(40, 2)}
         <LeftCol>
           <StyledTitle>
             Repérez vos besoins, on s’occupe du reste, avec les meilleurs
@@ -57,4 +60,3 @@ const Home=() =>{
 }
 
 export default Home
-

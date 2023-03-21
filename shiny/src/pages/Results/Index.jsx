@@ -63,7 +63,12 @@ function formatFetchParams(answers) {
     return `${previousParams}${separator}a${answerNumber}=${answers[answerNumber]}`
   }, '')
 }
-
+export function formatJobList(title, listLength, index) {
+  if (index === listLength - 1) {
+    return title
+  }
+  return `${title},`
+}
 function Results() {
   const { theme } = useContext(ThemeContext)
   const { answers } = useContext(SurveyContext)
@@ -95,6 +100,8 @@ function Results() {
             >
               {result.title}
               {index === resultsData.length - 1 ? '' : ','}
+              {/* Fonction test */}
+              {formatJobList(result.title, resultsData.length, index)}
             </JobTitle>
           ))}
       </ResultsTitle>
