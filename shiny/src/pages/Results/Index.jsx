@@ -63,6 +63,15 @@ function formatFetchParams(answers) {
     return `${previousParams}${separator}a${answerNumber}=${answers[answerNumber]}`
   }, '')
 }
+export function formatQueryParams(answers) {
+  const answerNumbers = Object.keys(answers)
+
+  return answerNumbers.reduce((previousParams, answerNumber, index) => {
+    const isFirstParam = index === 0
+    const separator = isFirstParam ? '' : '&'
+    return `${previousParams}${separator}a${answerNumber}=${answers[answerNumber]}`
+  }, '')
+}
 export function formatJobList(title, listLength, index) {
   if (index === listLength - 1) {
     return title
@@ -72,7 +81,9 @@ export function formatJobList(title, listLength, index) {
 function Results() {
   const { theme } = useContext(ThemeContext)
   const { answers } = useContext(SurveyContext)
-  const fetchParams = formatFetchParams(answers)
+  // const fetchParams = formatFetchParams(answers)
+  // Test pour exercice:::
+  const fetchParams = formatQueryParams(answers)
 
   const { data, isLoading, error } = useFetch(
     `http://localhost:8000/results?${fetchParams}`
