@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { SurveyContext } from '../../utils/context/Index'
 import styled from 'styled-components'
 import { colors } from '../../utils/style/colors'
+//On importe notre hook
 import { useFetch } from '../../utils/hooks/Index'
 import { StyledNavLink, Loader } from '../../utils/style/Atoms'
 import { ThemeContext } from '../../utils/context/Index'
